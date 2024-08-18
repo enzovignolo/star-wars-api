@@ -5,7 +5,7 @@ import { Document, Model } from 'mongoose';
 class Movie {
   @Prop()
   director: string;
-  @Prop()
+  @Prop({ unique: true })
   episodeId: number;
   @Prop()
   openingCrawl: string;
@@ -13,7 +13,7 @@ class Movie {
   producer: string;
   @Prop()
   releaseDate: Date;
-  @Prop()
+  @Prop({ required: true, unique: true })
   title: string;
   @Prop({ default: new Date(Date.now()) })
   createdAt: Date;
