@@ -1,6 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { PaginatedResponse } from './common/dto/pagination.dto';
+import { MovieDTO } from './controllers/movies/dto/get-movies.dto';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -10,7 +12,9 @@ async function bootstrap() {
     .setTitle('Star Wars API')
     .setDescription('The API of Star Wars Movies')
     .build();
-  const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, config, {
+    extraModels: [PaginatedResponse, MovieDTO],
+  });
   SwaggerModule.setup('api', app, document);
 
   await app.listen(process.env.PORT);
