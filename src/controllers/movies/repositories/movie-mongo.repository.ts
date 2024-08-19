@@ -9,6 +9,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { MovieModel } from '../schemas/movies.schema';
 import { CreateMovieDTO } from '../dto/create-movies.dto';
 import { Types } from 'mongoose';
+import { MovieDTO } from '../dto/get-movies.dto';
 @Injectable()
 export class MovieMongoRepository implements MoviesRepository {
   constructor(
@@ -31,6 +32,9 @@ export class MovieMongoRepository implements MoviesRepository {
   async getOne(id: Types.ObjectId): Promise<Movie> {
     return await this.movieModel.findById(id);
   }
+  async getOneByTitle(title: string): Promise<Movie> {
+    return await this.movieModel.findOne({ title });
+  }
   async deleteOne(id: Types.ObjectId): Promise<void> {
     const result = await this.movieModel.findByIdAndDelete({ _id: id });
     if (!result)
@@ -45,7 +49,9 @@ export class MovieMongoRepository implements MoviesRepository {
       new: true,
     });
   }
-  async createBulk(): Promise<void> {
-    return;
+  async createBulk(data: CreateMovieDTO[]): Promise<{ _id: Types.ObjectId }[]> {
+    const newData = await this.movieModel.insertMany(data);
+
+    return newData.map((movie) => ({ _id: movie._id }));
   }
 }
