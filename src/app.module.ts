@@ -7,7 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './controllers/auth/auth.module';
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     MoviesModule,
     AuthModule,
     MongooseModule.forRoot(process.env.DB_URI),
