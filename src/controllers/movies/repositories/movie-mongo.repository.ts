@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Movie } from '../entities/movies.entity';
 import { MoviesRepository } from '../movies.interface';
 import { InjectModel } from '@nestjs/mongoose';
@@ -27,11 +31,19 @@ export class MovieMongoRepository implements MoviesRepository {
   async getOne(id: Types.ObjectId): Promise<Movie> {
     return await this.movieModel.findById(id);
   }
-  async deleteOne(): Promise<Movie> {
-    return new Movie();
+  async deleteOne(id: Types.ObjectId): Promise<void> {
+    const result = await this.movieModel.findByIdAndDelete({ _id: id });
+    if (!result)
+      throw new NotFoundException(`Movie with id ${id} does not exist`);
+    return;
   }
-  async updateOne(): Promise<Movie> {
-    return new Movie();
+  async updateOne(
+    id: Types.ObjectId,
+    data: Partial<CreateMovieDTO>,
+  ): Promise<Movie> {
+    return await this.movieModel.findByIdAndUpdate({ _id: id }, data, {
+      new: true,
+    });
   }
   async createBulk(): Promise<void> {
     return;

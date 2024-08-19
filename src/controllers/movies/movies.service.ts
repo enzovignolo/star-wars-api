@@ -19,4 +19,11 @@ export class MoviesService {
   async getOne(id: Types.ObjectId) {
     return await this.moviesRepository.getOne(id);
   }
+
+  async updateOne(id: Types.ObjectId, data: Partial<CreateMovieDTO>) {
+    return await this.moviesRepository.updateOne(id, data);
+  }
+  async deleteOne(id: Types.ObjectId) {
+    return await this.moviesRepository.deleteOne(id);
+  }
 }

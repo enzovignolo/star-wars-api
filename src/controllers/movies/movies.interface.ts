@@ -8,7 +8,7 @@ export interface MoviesRepository {
   getAll(): Promise<Movie[]>;
   getOne(id: Types.ObjectId): Promise<Movie>;
   createOne(createMovieDto: CreateMovieDTO): Promise<Movie>;
-  updateOne(): Promise<Movie>;
-  deleteOne(): Promise<Movie>;
+  updateOne(id: Types.ObjectId, data: Partial<CreateMovieDTO>): Promise<Movie>;
+  deleteOne(id: Types.ObjectId): Promise<void>;
   createBulk(): Promise<void>;
 }

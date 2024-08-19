@@ -1,8 +1,20 @@
-import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Inject,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { PaginatedResponse } from '../../common/dto/pagination.dto';
 import { MovieDTO } from './dto/get-movies.dto';
 import {
   ApiCreatedResponse,
+  ApiNoContentResponse,
   ApiOkResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
@@ -58,5 +70,23 @@ export class MoviesController {
   @Get('/:id')
   async getOne(@Param('id') params: ObjectIdParam) {
     return await this.moviesService.getOne(params.id);
+  }
+
+  @ApiOkResponse({
+    type: MovieDTO,
+  })
+  @Put('/:id')
+  async updateOne(
+    @Param() params: ObjectIdParam,
+    @Body() data: Partial<CreateMovieDTO>,
+  ): Promise<MovieDTO> {
+    return await this.moviesService.updateOne(params.id, data);
+  }
+
+  @ApiNoContentResponse()
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete('/:id')
+  async deleteOne(@Param() params: ObjectIdParam): Promise<void> {
+    return await this.moviesService.deleteOne(params.id);
   }
 }
