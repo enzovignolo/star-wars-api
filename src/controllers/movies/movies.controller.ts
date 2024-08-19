@@ -66,6 +66,19 @@ export class MoviesController {
     return { _id: movieCreated._id };
   }
 
+  @ApiOkResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        status: { type: 'string', example: 'APP synced with SWAPI' },
+      },
+    },
+    description: 'Sincronización de la APP con SWAPI',
+  })
+  @Get('/sync')
+  async syncMovies() {
+    return await this.moviesService.syncData();
+  }
   @ApiOkResponse({ type: MovieDTO })
   @Get('/:id')
   async getOne(@Param() params: ObjectIdParam) {
