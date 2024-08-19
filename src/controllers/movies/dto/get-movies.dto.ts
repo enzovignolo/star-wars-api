@@ -16,4 +16,8 @@ export class MovieDTO {
   releaseDate?: Date;
   @ApiProperty()
   title: string;
+  @ApiProperty()
+  createdAt: Date;
+  @ApiProperty()
+  updatedAt: Date;
 }
