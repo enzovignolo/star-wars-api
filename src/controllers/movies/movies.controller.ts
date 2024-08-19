@@ -22,6 +22,7 @@ import {
   ApiForbiddenResponse,
   ApiNoContentResponse,
   ApiOkResponse,
+  ApiTags,
   ApiUnauthorizedResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
@@ -34,6 +35,7 @@ import { ObjectIdParam } from '../../common/dto/params.dto';
 import { AuthGuard } from '../auth/auth.guard';
 import { AdminGuard } from '../auth/admin.guard';
 
+@ApiTags('movies')
 @ApiBearerAuth()
 @Controller('movies')
 export class MoviesController {
