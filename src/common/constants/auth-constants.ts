@@ -1,0 +1,4 @@
+export const AUTH_CONSTANTS = {
+  JWT_SECRET: process.env.JWT_SECRET || 'DEFAULT_SECRET',
+  JWT_EXPIRATION_SECONDS: process.env.JWT_EXPIRATION_SECONDS || 60,
+};
