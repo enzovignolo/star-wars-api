@@ -4,6 +4,7 @@ import { MoviesRepository } from '../movies.interface';
 import { InjectModel } from '@nestjs/mongoose';
 import { MovieModel } from '../schemas/movies.schema';
 import { CreateMovieDTO } from '../dto/create-movies.dto';
+import { Types } from 'mongoose';
 @Injectable()
 export class MovieMongoRepository implements MoviesRepository {
   constructor(
@@ -23,8 +24,8 @@ export class MovieMongoRepository implements MoviesRepository {
       return err;
     }
   }
-  async getOne(): Promise<Movie> {
-    return new Movie();
+  async getOne(id: Types.ObjectId): Promise<Movie> {
+    return await this.movieModel.findById(id);
   }
   async deleteOne(): Promise<Movie> {
     return new Movie();
