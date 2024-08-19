@@ -9,13 +9,17 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { PaginatedResponse } from '../../common/dto/pagination.dto';
 import { MovieDTO } from './dto/get-movies.dto';
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
+  ApiForbiddenResponse,
   ApiNoContentResponse,
   ApiOkResponse,
+  ApiUnauthorizedResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
 import { MoviesService } from './movies.service';
@@ -24,7 +28,10 @@ import {
   CreatedMovieResponseDTO,
 } from './dto/create-movies.dto';
 import { ObjectIdParam } from '../../common/dto/params.dto';
+import { AuthGuard } from '../auth/auth.guard';
+import { AdminGuard } from '../auth/admin.guard';
 
+@ApiBearerAuth()
 @Controller('movies')
 export class MoviesController {
   constructor(@Inject() private readonly moviesService: MoviesService) {}
@@ -44,6 +51,16 @@ export class MoviesController {
       ],
     },
   })
+  @ApiUnauthorizedResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        status: { type: 'number', enum: [401] },
+        message: { type: 'string', enum: ['Unauthorized'] },
+      },
+    },
+  })
+  @UseGuards(AuthGuard)
   @Get()
   async getAll(): Promise<PaginatedResponse<MovieDTO>> {
     const data = await this.moviesService.getAll();
@@ -58,6 +75,26 @@ export class MoviesController {
   @ApiCreatedResponse({
     type: CreatedMovieResponseDTO,
   })
+  @ApiUnauthorizedResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        status: { type: 'number', enum: [401] },
+        message: { type: 'string', enum: ['Unauthorized'] },
+      },
+    },
+  })
+  @ApiForbiddenResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        message: { type: 'string' },
+        status: { type: 'number', enum: [403] },
+        error: { type: 'string', enum: ['Forbidden'] },
+      },
+    },
+  })
+  @UseGuards(AuthGuard, AdminGuard)
   @Post()
   async createOne(
     @Body() createMovieDto: CreateMovieDTO,
@@ -75,11 +112,41 @@ export class MoviesController {
     },
     description: 'Sincronización de la APP con SWAPI',
   })
+  @ApiUnauthorizedResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        status: { type: 'number', enum: [401] },
+        message: { type: 'string', enum: ['Unauthorized'] },
+      },
+    },
+  })
+  @ApiForbiddenResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        message: { type: 'string' },
+        status: { type: 'number', enum: [403] },
+        error: { type: 'string', enum: ['Forbidden'] },
+      },
+    },
+  })
+  @UseGuards(AuthGuard, AdminGuard)
   @Get('/sync')
   async syncMovies() {
     return await this.moviesService.syncData();
   }
   @ApiOkResponse({ type: MovieDTO })
+  @ApiUnauthorizedResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        status: { type: 'number', enum: [401] },
+        message: { type: 'string', enum: ['Unauthorized'] },
+      },
+    },
+  })
+  @UseGuards(AuthGuard)
   @Get('/:id')
   async getOne(@Param() params: ObjectIdParam) {
     return await this.moviesService.getOne(params.id);
@@ -88,6 +155,26 @@ export class MoviesController {
   @ApiOkResponse({
     type: MovieDTO,
   })
+  @ApiUnauthorizedResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        status: { type: 'number', enum: [401] },
+        message: { type: 'string', enum: ['Unauthorized'] },
+      },
+    },
+  })
+  @ApiForbiddenResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        message: { type: 'string' },
+        status: { type: 'number', enum: [403] },
+        error: { type: 'string', enum: ['Forbidden'] },
+      },
+    },
+  })
+  @UseGuards(AuthGuard, AdminGuard)
   @Put('/:id')
   async updateOne(
     @Param() params: ObjectIdParam,
@@ -97,7 +184,27 @@ export class MoviesController {
   }
 
   @ApiNoContentResponse()
+  @ApiUnauthorizedResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        status: { type: 'number', enum: [401] },
+        message: { type: 'string', enum: ['Unauthorized'] },
+      },
+    },
+  })
+  @ApiForbiddenResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        message: { type: 'string' },
+        status: { type: 'number', enum: [403] },
+        error: { type: 'string', enum: ['Forbidden'] },
+      },
+    },
+  })
   @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(AuthGuard, AdminGuard)
   @Delete('/:id')
   async deleteOne(@Param() params: ObjectIdParam): Promise<void> {
     return await this.moviesService.deleteOne(params.id);
