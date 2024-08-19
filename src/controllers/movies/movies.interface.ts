@@ -1,11 +1,14 @@
 import { Types } from 'mongoose';
 import { CreateMovieDTO } from './dto/create-movies.dto';
 import { Movie } from './entities/movies.entity';
+import { MovieQueryDTO } from './dto/get-movies.dto';
 
 export const MOVIES_REPOSITORY = 'MoviesRepository';
 
 export interface MoviesRepository {
-  getAll(): Promise<Movie[]>;
+  getAllandCount(
+    paginationParms?: MovieQueryDTO,
+  ): Promise<{ movies: Movie[]; count: number }>;
   getOne(id: Types.ObjectId): Promise<Movie>;
   getOneByTitle(title: string): Promise<Movie | null>;
   createOne(createMovieDto: CreateMovieDTO): Promise<Movie>;

@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { MOVIES_REPOSITORY, MoviesRepository } from './movies.interface';
 import { CreateMovieDTO } from './dto/create-movies.dto';
 import { Types } from 'mongoose';
+import { MovieQueryDTO } from './dto/get-movies.dto';
 
 @Injectable()
 export class MoviesService {
@@ -9,8 +10,8 @@ export class MoviesService {
     @Inject(MOVIES_REPOSITORY)
     private readonly moviesRepository: MoviesRepository,
   ) {}
-  async getAll() {
-    return this.moviesRepository.getAll();
+  async getAll(paginationParms?: MovieQueryDTO) {
+    return this.moviesRepository.getAllandCount(paginationParms);
   }
   async createOne(createMovieDto: CreateMovieDTO) {
     return await this.moviesRepository.createOne(createMovieDto);

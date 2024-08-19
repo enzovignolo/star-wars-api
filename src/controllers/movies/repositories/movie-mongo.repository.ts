@@ -9,14 +9,24 @@ import { InjectModel } from '@nestjs/mongoose';
 import { MovieModel } from '../schemas/movies.schema';
 import { CreateMovieDTO } from '../dto/create-movies.dto';
 import { Types } from 'mongoose';
-import { MovieDTO } from '../dto/get-movies.dto';
+import { MovieQueryDTO } from '../dto/get-movies.dto';
+
 @Injectable()
 export class MovieMongoRepository implements MoviesRepository {
   constructor(
     @InjectModel(Movie.name) private readonly movieModel: MovieModel,
   ) {}
-  async getAll(): Promise<Movie[]> {
-    return this.movieModel.find();
+  async getAllandCount(
+    paginationParams?: MovieQueryDTO,
+  ): Promise<{ movies: Movie[]; count: number }> {
+    const [movies, count] = await Promise.all([
+      this.movieModel
+        .find()
+        .limit(paginationParams.limit)
+        .skip(paginationParams.limit * (paginationParams.page - 1)),
+      this.movieModel.countDocuments({}),
+    ]);
+    return { movies, count };
   }
   async createOne(createMovieDto: CreateMovieDTO): Promise<Movie> {
     try {

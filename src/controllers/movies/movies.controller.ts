@@ -9,10 +9,13 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { PaginatedResponse } from '../../common/dto/pagination.dto';
-import { MovieDTO } from './dto/get-movies.dto';
+import { MovieDTO, MovieQueryDTO } from './dto/get-movies.dto';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -61,14 +64,19 @@ export class MoviesController {
     },
   })
   @UseGuards(AuthGuard)
+  @UsePipes(new ValidationPipe({ transform: true }))
   @Get()
-  async getAll(): Promise<PaginatedResponse<MovieDTO>> {
-    const data = await this.moviesService.getAll();
+  async getAll(
+    @Query() query: MovieQueryDTO,
+  ): Promise<PaginatedResponse<MovieDTO>> {
+    const paginationOpts = new MovieQueryDTO(query);
+    const { movies: data, count } =
+      await this.moviesService.getAll(paginationOpts);
     return {
       data,
-      total: 0,
-      currentPage: 0,
-      totalPages: 0,
+      total: count,
+      currentPage: paginationOpts.page,
+      totalPages: Math.ceil(count / (paginationOpts.limit || count)),
     };
   }
 
