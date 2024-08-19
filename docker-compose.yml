@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  star-wars-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: star-wars-api
+    restart: always
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env.docker.local
+
+    depends_on:
+      - mongodb
+    networks:
+      - star-wars-network
+
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - star-wars-network
+
+networks:
+  star-wars-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
