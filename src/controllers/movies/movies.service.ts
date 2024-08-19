@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { MOVIES_REPOSITORY, MoviesRepository } from './movies.interface';
 import { CreateMovieDTO } from './dto/create-movies.dto';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class MoviesService {
@@ -13,5 +14,9 @@ export class MoviesService {
   }
   async createOne(createMovieDto: CreateMovieDTO) {
     return await this.moviesRepository.createOne(createMovieDto);
+  }
+
+  async getOne(id: Types.ObjectId) {
+    return await this.moviesRepository.getOne(id);
   }
 }
