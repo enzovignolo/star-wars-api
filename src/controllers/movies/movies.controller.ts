@@ -1,9 +1,17 @@
 import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
 import { PaginatedResponse } from '../../common/dto/pagination.dto';
 import { MovieDTO } from './dto/get-movies.dto';
-import { ApiOkResponse, getSchemaPath } from '@nestjs/swagger';
+import {
+  ApiCreatedResponse,
+  ApiOkResponse,
+  PickType,
+  getSchemaPath,
+} from '@nestjs/swagger';
 import { MoviesService } from './movies.service';
-import { CreateMovieDTO } from './dto/create-movies.dto';
+import {
+  CreateMovieDTO,
+  CreatedMovieResponseDTO,
+} from './dto/create-movies.dto';
 
 @Controller('movies')
 export class MoviesController {
@@ -35,8 +43,14 @@ export class MoviesController {
     };
   }
 
+  @ApiCreatedResponse({
+    type: CreatedMovieResponseDTO,
+  })
   @Post()
-  async createOne(@Body() createMovieDto: CreateMovieDTO): Promise<MovieDTO> {
-    return await this.moviesService.createOne(createMovieDto);
+  async createOne(
+    @Body() createMovieDto: CreateMovieDTO,
+  ): Promise<Pick<MovieDTO, '_id'>> {
+    const movieCreated = await this.moviesService.createOne(createMovieDto);
+    return { _id: movieCreated._id };
   }
 }

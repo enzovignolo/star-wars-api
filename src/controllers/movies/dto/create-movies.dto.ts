@@ -6,6 +6,7 @@ import {
   IsPositive,
   IsString,
 } from 'class-validator';
+import { Types } from 'mongoose';
 
 export class CreateMovieDTO {
   @ApiPropertyOptional()
@@ -31,4 +32,9 @@ export class CreateMovieDTO {
   @ApiProperty()
   @IsString()
   title: string;
+}
+
+export class CreatedMovieResponseDTO {
+  @ApiProperty({ type: String })
+  _id: Types.ObjectId;
 }
