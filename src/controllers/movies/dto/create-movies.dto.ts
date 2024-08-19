@@ -12,23 +12,23 @@ export class CreateMovieDTO {
   @ApiPropertyOptional()
   @IsString()
   @IsOptional()
-  director: string;
+  director?: string;
   @ApiPropertyOptional()
   @IsNumber()
   @IsPositive()
   @IsOptional()
-  episodeId: number;
+  episodeId?: number;
   @ApiPropertyOptional()
   @IsString()
   @IsOptional()
-  openingCrawl: string;
+  openingCrawl?: string;
   @ApiPropertyOptional()
   @IsString()
   @IsOptional()
-  producer: string;
+  producer?: string;
   @ApiPropertyOptional()
   @IsDateString()
-  releaseDate: Date;
+  releaseDate?: Date;
   @ApiProperty()
   @IsString()
   title: string;
