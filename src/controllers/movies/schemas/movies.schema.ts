@@ -5,7 +5,7 @@ import { Document, Model } from 'mongoose';
 class Movie {
   @Prop()
   director: string;
-  @Prop({ unique: true })
+  @Prop()
   episodeId: number;
   @Prop()
   openingCrawl: string;
