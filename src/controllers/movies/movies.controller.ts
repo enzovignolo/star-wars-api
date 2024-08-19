@@ -68,7 +68,7 @@ export class MoviesController {
 
   @ApiOkResponse({ type: MovieDTO })
   @Get('/:id')
-  async getOne(@Param('id') params: ObjectIdParam) {
+  async getOne(@Param() params: ObjectIdParam) {
     return await this.moviesService.getOne(params.id);
   }
 
