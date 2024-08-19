@@ -34,7 +34,7 @@ export class MoviesService {
    * or update them if exist
    */
   async syncData() {
-    const response = await fetch('/films');
+    const response = await fetch(process.env.SWAPI_URL + '/films');
     const { results } = await response.json();
 
     let toUpdate = [];
