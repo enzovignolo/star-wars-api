@@ -18,7 +18,7 @@ export class UserMongoRepository implements UsersRepository {
       }
     }
   }
-  async getOne(id: Types.ObjectId): Promise<User> {
-    return await this.userModel.findById(id);
+  async getOneByEmail(email: string): Promise<User> {
+    return await this.userModel.findOne({ email });
   }
 }
