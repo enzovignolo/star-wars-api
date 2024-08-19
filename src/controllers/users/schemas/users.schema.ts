@@ -9,7 +9,7 @@ class User {
   @Prop({ required: true })
   hash: string;
   @Prop({ required: true, default: ROLES.USER })
-  roles: ROLES;
+  role: ROLES;
   @Prop({ default: new Date(Date.now()) })
   createdAt: Date;
   @Prop({ default: new Date(Date.now()) })
