@@ -1,16 +1,19 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Types } from 'mongoose';
 
 export class MovieDTO {
+  @ApiProperty({ type: String })
+  _id: Types.ObjectId;
   @ApiProperty()
   director: string;
-  @ApiProperty()
-  episodeId: number;
-  @ApiProperty()
-  openingCrawl: string;
-  @ApiProperty()
-  producer: string;
-  @ApiProperty()
-  releaseDate: Date;
+  @ApiPropertyOptional()
+  episodeId?: number;
+  @ApiPropertyOptional()
+  openingCrawl?: string;
+  @ApiPropertyOptional()
+  producer?: string;
+  @ApiPropertyOptional()
+  releaseDate?: Date;
   @ApiProperty()
   title: string;
 }
