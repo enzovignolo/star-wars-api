@@ -12,6 +12,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Star Wars API')
     .setDescription('The API of Star Wars Movies')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config, {
     extraModels: [PaginatedResponse, MovieDTO],
